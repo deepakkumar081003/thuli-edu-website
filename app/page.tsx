@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 import { HiAcademicCap, HiDesktopComputer, HiClipboardCheck, HiCurrencyDollar, HiClock, HiLightBulb } from 'react-icons/hi'
+import CoursesCarousel from '@/components/CoursesCarousel'
+import { FaLaptopCode, FaChalkboardTeacher } from 'react-icons/fa'
 
 export default async function Home() {
   const { data: products } = await supabase
@@ -22,7 +24,7 @@ export default async function Home() {
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* HERO SECTION */}
-  <section className="relative px-16 md:px-32 py-32 flex flex-col md:flex-row items-center gap-12">
+      <section className="relative px-16 md:px-32 py-32 flex flex-col md:flex-row items-center gap-12">
         <div className="md:w-1/2 text-center md:text-left">
           <p className="text-yellow-400 font-semibold mb-2">Looking to learn ‘how to Code’?</p>
           <h1 className="text-4xl md:text-5xl font-bold text-purple-900 leading-tight mb-4">
@@ -39,118 +41,102 @@ export default async function Home() {
             Know More
           </Link>
         </div>
-        <div className="md:w-1/2">
-          <img src="/your-hero-image.png" alt="Programming illustration" className="rounded-xl shadow-lg" />
-        </div>
+
+        {/* Icon illustration instead of image */}
+        <div className="md:w-1/2 flex justify-center md:justify-end">
+  <div className="bg-purple-100 p-16 rounded-3xl shadow-2xl flex items-center justify-center text-purple-700 text-9xl hover:scale-105 transition-transform">
+    <FaLaptopCode />
+  </div>
+</div>
+
       </section>
 
       {/* FEATURES SECTION */}
-  <section className="px-16 md:px-32 py-24">
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-center">
-    {[
-      { icon: <HiAcademicCap />, title: 'Experts as Trainers' },
-      { icon: <HiDesktopComputer />, title: 'LIVE Project' },
-      { icon: <HiClipboardCheck />, title: 'Certification' },
-      { icon: <HiCurrencyDollar />, title: 'Affordable Fees' },
-      { icon: <HiClock />, title: 'Flexibility' },
-      { icon: <HiLightBulb />, title: 'Easy Learning' },
-    ].map((f, i) => (
-      <div
-        key={i}
-        className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition hover:scale-105 p-6 flex flex-col items-center justify-center"
-      >
-        <div className="bg-purple-900 text-white w-14 h-14 rounded-lg flex items-center justify-center mb-3 text-3xl">
-          {f.icon}
+      <section className="px-16 md:px-32 py-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-center">
+          {[
+            { icon: <HiAcademicCap />, title: 'Experts as Trainers' },
+            { icon: <HiDesktopComputer />, title: 'LIVE Project' },
+            { icon: <HiClipboardCheck />, title: 'Certification' },
+            { icon: <HiCurrencyDollar />, title: 'Affordable Fees' },
+            { icon: <HiClock />, title: 'Flexibility' },
+            { icon: <HiLightBulb />, title: 'Easy Learning' },
+          ].map((f, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition hover:scale-105 p-6 flex flex-col items-center justify-center"
+            >
+              <div className="bg-purple-900 text-white w-14 h-14 rounded-lg flex items-center justify-center mb-3 text-3xl">
+                {f.icon}
+              </div>
+              <h3 className="text-purple-900 font-semibold text-lg md:text-base">
+                {f.title}
+              </h3>
+            </div>
+          ))}
         </div>
-        <h3 className="text-purple-900 font-semibold text-lg md:text-base">
-          {f.title}
-        </h3>
-      </div>
-    ))}
-  </div>
-</section>
+      </section>
 
+      {/* COURSES SECTION */}
+      <section className="px-16 md:px-32 py-16">
+        <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">
+          Popular Courses
+        </h2>
+        <p className="text-yellow-400 mb-6 text-xl">
+          Practical, beginner-friendly, and career-focused courses
+        </p>
+        <CoursesCarousel products={products || []} />
+      </section>
 
-      {/* COURSES & TUITIONS */}
-  <section className="px-16 md:px-32 py-16">
-  <div className="flex flex-col md:flex-row gap-6">
+      {/* TUITIONS HERO SECTION */}
+      <section className="px-16 md:px-32 py-24 bg-purple-50 rounded-3xl relative overflow-hidden">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
 
-    {/* Courses */}
-<div className="flex-1 w-full pr-0 md:pr-3">
-  <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">Popular Courses</h2>
-  <p className="text-yellow-400 mb-6 text-xl">Practical, beginner-friendly, and career-focused courses</p>
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-    {products?.slice(0, 9).map((p) => (
-      <img
-        key={p.id}
-        src={p.image_url}
-        alt={p.title}
-        className="w-full h-56 object-cover rounded-xl hover:scale-105 transition-transform cursor-pointer"
-      />
-    ))}
+          {/* Left Side - Text */}
+          <div className="md:w-1/2 text-center md:text-left">
+            <p className="text-yellow-400 font-semibold text-lg mb-2">Expert Tuition for Every Student</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-4 leading-snug">
+              Classes 6 to 12 <br />
+              CBSE, Matric, Foreign & IGCSE
+            </h2>
+            <p className="text-purple-900 text-lg mb-6">
+              Personalized learning to help your child excel. Online, offline, and premium one-on-one sessions.
+            </p>
+
+            {/* Modes */}
+            <div className="flex flex-wrap gap-4 mb-6 justify-center md:justify-start">
+              <span className="bg-white text-purple-900 font-semibold px-4 py-2 rounded-full shadow-md">Online</span>
+              <span className="bg-white text-purple-900 font-semibold px-4 py-2 rounded-full shadow-md">Offline</span>
+              <span className="bg-yellow-400 text-white font-semibold px-4 py-2 rounded-full shadow-md flex items-center gap-2">
+                One-on-One <span className="text-xs bg-white text-yellow-500 px-1 rounded-full">Premium</span>
+              </span>
+            </div>
+
+            {/* Call to action */}
+            <Link
+              href="/tuitions"
+              className="inline-block bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform"
+            >
+              Join Now
+            </Link>
+          </div>
+
+          {/* Right Side - Icon illustration */}
+          <div className="md:w-1/2 flex justify-center md:justify-end">
+  <div className="bg-purple-100 p-16 rounded-3xl shadow-2xl flex items-center justify-center text-purple-700 text-9xl hover:scale-105 transition-transform">
+    <FaChalkboardTeacher />
   </div>
 </div>
 
 
-    {/* Divider */}
-    <div className="hidden md:block w-0.5 bg-gradient-to-b from-purple-200 to-indigo-200 rounded-full"></div>
-
-    {/* Tuitions */}
-<div className="flex-1 w-full pl-0 md:pl-3">
-  <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">Ongoing Tuitions</h2>
-  <p className="text-yellow-400 mb-6 text-xl">Find expert tutors for your class and subjects</p>
-
-  <div className="flex flex-col gap-4">
-    {tuitions?.slice(0, 3).map((t) => (
-      <div
-        key={t.id}
-        className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition flex flex-col justify-between h-56"
-      >
-        {/* Title */}
-        <h3 className="text-purple-900 font-semibold text-2xl mb-3">{t.title}</h3>
-
-        {/* 2-column grid for label-value pairs */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-lg">
-          {/* Row 1 */}
-          <div className="flex items-center">
-            <span className="font-semibold text-yellow-400">Class:</span>
-            <span className="text-purple-900 font-medium ml-2">{t.class_level}</span>
-          </div>
-          <div className="flex items-center">
-            <span className="font-semibold text-yellow-400">Mode:</span>
-            <span className="text-purple-900 font-medium ml-2">{t.mode}</span>
-          </div>
-
-          {/* Row 2 */}
-          <div className="flex items-center">
-            <span className="font-semibold text-yellow-400">Subject:</span>
-            <span className="text-purple-900 font-medium ml-2">{t.subject}</span>
-          </div>
-          <div className="flex items-center">
-            <span className="font-semibold text-yellow-400">Fees:</span>
-            <span className="text-purple-900 font-medium ml-2">{t.fees}</span>
-          </div>
-
-          {/* Row 3 - Description */}
-          <div className="col-span-2 mt-2 text-purple-900 truncate">
-            {t.description}
-          </div>
         </div>
-      </div>
-    ))}
-  </div>
-</div>
 
+        {/* Decorative shapes */}
+        <div className="absolute -top-16 -left-16 w-64 h-64 bg-yellow-400 rounded-full opacity-20"></div>
+        <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-purple-900 rounded-full opacity-10"></div>
+      </section>
 
-
-  </div>
-</section>
-
-
-
-
-
-      {/* WHY THULI */}
+          {/* WHY THULI */}
   <section className="px-16 md:px-32 py-24 bg-white">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-4">Why THULI?</h2>
@@ -218,23 +204,28 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* CTA SECTION */}
-  <section className="px-16 md:px-32 py-24 bg-white">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl text-center p-12 shadow-xl transform hover:scale-105 transition-transform">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-purple-900">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-yellow-400 md:text-2xl mb-8">
-            Join thousands of learners and kickstart your career today.
-          </p>
-          <Link
-            href="/products"
-            className="bg-yellow-400 hover:bg-yellow-500 text-white px-12 py-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform shadow-lg"
-          >
-            Get Started
-          </Link>
-        </div>
-      </section>
+      {/* CTA HERO SECTION */}
+<section className="px-16 md:px-32 py-24 bg-gradient-to-r from-purple-50 via-white to-indigo-50 relative overflow-hidden rounded-3xl">
+  <div className="max-w-4xl mx-auto text-center relative z-10">
+    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-purple-900 leading-snug">
+      Ready to Start Your Journey?
+    </h2>
+    <p className="text-yellow-400 md:text-2xl mb-8">
+      Join thousands of learners and kickstart your career today.
+    </p>
+    <Link
+      href="/products"
+      className="inline-block bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold px-12 py-4 rounded-xl shadow-lg hover:scale-105 transition-transform"
+    >
+      Get Started
+    </Link>
+  </div>
+
+  {/* Decorative shapes */}
+  <div className="absolute -top-16 -left-16 w-64 h-64 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
+  <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-purple-900 rounded-full opacity-10 animate-pulse"></div>
+  <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-400 rounded-full opacity-5 -translate-x-1/2 -translate-y-1/2"></div>
+</section>
 
     </div>
   )

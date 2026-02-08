@@ -10,3 +10,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Stylish horizontal scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px; /* horizontal scrollbar thickness */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3e8ff; /* track color (light purple) */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #7c3aed; /* draggable part (deep purple) */
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #5b21b6; /* darker purple on hover */
+}
+
+/* Hide horizontal scrollbar but keep scroll functionality */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
