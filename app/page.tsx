@@ -1,65 +1,241 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { supabase } from '@/lib/supabaseClient'
+import { HiAcademicCap, HiDesktopComputer, HiClipboardCheck, HiCurrencyDollar, HiClock, HiLightBulb } from 'react-icons/hi'
 
-export default function Home() {
+export default async function Home() {
+  const { data: products } = await supabase
+    .from('products')
+    .select('id, title, short_description, image_url')
+    .limit(9)
+
+  const { data: tuitions } = await supabase
+    .from('tuitions')
+    .select('id, title, class_level, subject, fees, mode, description')
+    .limit(3)
+
+  const { data: blogs } = await supabase
+    .from('blogs')
+    .select('id, title, content, cover_image')
+    .limit(3)
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
+
+      {/* HERO SECTION */}
+  <section className="relative px-16 md:px-32 py-32 flex flex-col md:flex-row items-center gap-12">
+        <div className="md:w-1/2 text-center md:text-left">
+          <p className="text-yellow-400 font-semibold mb-2">Looking to learn ‘how to Code’?</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-purple-900 leading-tight mb-4">
+            Learn Programming <br />
+            The way it's meant to be
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-gray-600 text-lg mb-6">
+            Join our community with 20+ day workshops on programming languages.
+          </p>
+          <Link
+            href="/products"
+            className="bg-gradient-to-r from-purple-600 to-indigo-500 text-white px-8 py-3 rounded-lg font-semibold hover:scale-105 transition-transform"
+          >
+            Know More
+          </Link>
+        </div>
+        <div className="md:w-1/2">
+          <img src="/your-hero-image.png" alt="Programming illustration" className="rounded-xl shadow-lg" />
+        </div>
+      </section>
+
+      {/* FEATURES SECTION */}
+  <section className="px-16 md:px-32 py-24">
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-center">
+    {[
+      { icon: <HiAcademicCap />, title: 'Experts as Trainers' },
+      { icon: <HiDesktopComputer />, title: 'LIVE Project' },
+      { icon: <HiClipboardCheck />, title: 'Certification' },
+      { icon: <HiCurrencyDollar />, title: 'Affordable Fees' },
+      { icon: <HiClock />, title: 'Flexibility' },
+      { icon: <HiLightBulb />, title: 'Easy Learning' },
+    ].map((f, i) => (
+      <div
+        key={i}
+        className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition hover:scale-105 p-6 flex flex-col items-center justify-center"
+      >
+        <div className="bg-purple-900 text-white w-14 h-14 rounded-lg flex items-center justify-center mb-3 text-3xl">
+          {f.icon}
+        </div>
+        <h3 className="text-purple-900 font-semibold text-lg md:text-base">
+          {f.title}
+        </h3>
+      </div>
+    ))}
+  </div>
+</section>
+
+
+      {/* COURSES & TUITIONS */}
+  <section className="px-16 md:px-32 py-16">
+  <div className="flex flex-col md:flex-row gap-6">
+
+    {/* Courses */}
+<div className="flex-1 w-full pr-0 md:pr-3">
+  <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">Popular Courses</h2>
+  <p className="text-yellow-400 mb-6 text-xl">Practical, beginner-friendly, and career-focused courses</p>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {products?.slice(0, 9).map((p) => (
+      <img
+        key={p.id}
+        src={p.image_url}
+        alt={p.title}
+        className="w-full h-56 object-cover rounded-xl hover:scale-105 transition-transform cursor-pointer"
+      />
+    ))}
+  </div>
+</div>
+
+
+    {/* Divider */}
+    <div className="hidden md:block w-0.5 bg-gradient-to-b from-purple-200 to-indigo-200 rounded-full"></div>
+
+    {/* Tuitions */}
+<div className="flex-1 w-full pl-0 md:pl-3">
+  <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">Ongoing Tuitions</h2>
+  <p className="text-yellow-400 mb-6 text-xl">Find expert tutors for your class and subjects</p>
+
+  <div className="flex flex-col gap-4">
+    {tuitions?.slice(0, 3).map((t) => (
+      <div
+        key={t.id}
+        className="bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition flex flex-col justify-between h-56"
+      >
+        {/* Title */}
+        <h3 className="text-purple-900 font-semibold text-2xl mb-3">{t.title}</h3>
+
+        {/* 2-column grid for label-value pairs */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-lg">
+          {/* Row 1 */}
+          <div className="flex items-center">
+            <span className="font-semibold text-yellow-400">Class:</span>
+            <span className="text-purple-900 font-medium ml-2">{t.class_level}</span>
+          </div>
+          <div className="flex items-center">
+            <span className="font-semibold text-yellow-400">Mode:</span>
+            <span className="text-purple-900 font-medium ml-2">{t.mode}</span>
+          </div>
+
+          {/* Row 2 */}
+          <div className="flex items-center">
+            <span className="font-semibold text-yellow-400">Subject:</span>
+            <span className="text-purple-900 font-medium ml-2">{t.subject}</span>
+          </div>
+          <div className="flex items-center">
+            <span className="font-semibold text-yellow-400">Fees:</span>
+            <span className="text-purple-900 font-medium ml-2">{t.fees}</span>
+          </div>
+
+          {/* Row 3 - Description */}
+          <div className="col-span-2 mt-2 text-purple-900 truncate">
+            {t.description}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
+  </div>
+</section>
+
+
+
+
+
+      {/* WHY THULI */}
+  <section className="px-16 md:px-32 py-24 bg-white">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-4">Why THULI?</h2>
+          <p className="text-purple-900 max-w-2xl mx-auto text-xl">
+            Learn with expert instructors, interactive classes, and hands-on projects.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+          {[
+            { number: '01', title: 'Interactive Classes' },
+            { number: '02', title: 'Get Certified' },
+            { number: '03', title: 'Fully Practical' },
+            { number: '04', title: 'No Prerequisite Required' },
+          ].map((item) => (
+            <div key={item.number} className="bg-purple-50 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:shadow-lg transition">
+              <div className="w-14 h-14 flex items-center justify-center rounded-full bg-yellow-400 text-white font-bold mb-3 text-2xl">
+                {item.number}
+              </div>
+              <h3 className="text-yellow-400 font-semibold text-xl">{item.title}</h3>
+            </div>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* LATEST BLOGS - HORIZONTAL CARDS */}
+  <section className="px-16 md:px-32 py-24 bg-purple-50">
+        <h2 className="text-4xl md:text-5xl font-bold text-purple-900 text-center mb-4">
+          Latest Blogs
+        </h2>
+        <p className="text-purple-900 text-center mb-12 text-xl">
+          Stay updated with our latest tips and articles
+        </p>
+
+        <div className="space-y-8">
+          {blogs?.map((b, i) => (
+            <div
+              key={b.id}
+              className={`flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden transition hover:scale-105 ${
+                i % 2 === 1 ? 'md:flex-row-reverse' : ''
+              }`}
+            >
+              {b.cover_image && (
+                <img
+                  src={b.cover_image}
+                  className="md:w-1/2 h-72 object-cover rounded-l-2xl md:rounded-l-2xl md:rounded-r-none"
+                />
+              )}
+              <div className="p-8 md:w-1/2">
+                <h3 className="text-purple-900 font-semibold text-2xl mb-3">
+                  {b.title}
+                </h3>
+                <p className="text-yellow-400 text-lg mt-2">
+                  {b.content?.slice(0, 150)}
+                  {b.content && b.content.length > 150 ? '...' : ''}
+                </p>
+                <Link
+                  href={`/blogs/${b.id}`}
+                  className="inline-block mt-6 text-yellow-400 font-semibold text-lg hover:underline"
+                >
+                  Read More →
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+  <section className="px-16 md:px-32 py-24 bg-white">
+        <div className="max-w-4xl mx-auto bg-white rounded-3xl text-center p-12 shadow-xl transform hover:scale-105 transition-transform">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-purple-900">
+            Ready to Start Your Journey?
+          </h2>
+          <p className="text-yellow-400 md:text-2xl mb-8">
+            Join thousands of learners and kickstart your career today.
+          </p>
+          <Link
+            href="/products"
+            className="bg-yellow-400 hover:bg-yellow-500 text-white px-12 py-4 rounded-xl font-semibold text-lg hover:scale-105 transition-transform shadow-lg"
+          >
+            Get Started
+          </Link>
+        </div>
+      </section>
+
     </div>
-  );
+  )
 }
