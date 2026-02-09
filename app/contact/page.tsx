@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { HiMail, HiPhone, HiLocationMarker } from 'react-icons/hi'
 import { FaWhatsapp } from 'react-icons/fa'
+import { Listbox, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import { HiChevronDown } from 'react-icons/hi'
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -56,44 +59,68 @@ export default function ContactPage() {
     return []
   }
 
-  /* ---------------- SUBMIT EMAIL ---------------- */
-  async function handleSubmit(e: any) {
-    e.preventDefault()
+  /* ---------------- INSERT ENQUIRY ---------------- */
+async function insertEnquiry() {
+  try {
+    const sourceValue = form.enquiryType
+      ? `${form.enquiryType} - ${form.enquiryItem || 'Other'}`
+      : 'Other'
 
-    await supabase.from('enquiries').insert({
-      name: form.name,
-      mobile: form.mobile,
-      email: form.email || null,
-      message: form.message,
-      enquiry_type: form.enquiryType,
-      enquiry_item: form.enquiryItem,
+    const { data, error } = await supabase.from('enquiries').insert({
+      name: form.name ,
+      email: form.email || 'Not provided',  // <-- must NOT be null
+      phone: form.mobile,
+      message: form.message || 'No message',
+      source: form.enquiryType
+        ? `${form.enquiryType} - ${form.enquiryItem || 'Other'}`
+        : 'Other',
+      status: 'Pending',
     })
 
-    alert('Message sent successfully!')
-    resetForm()
+
+    if (error) {
+      console.error('Supabase insert error:', error)
+    } else {
+      console.log('Inserted enquiry:', data)
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err)
   }
+}
+
+
+
+ /* ---------------- SUBMIT EMAIL ---------------- */
+async function handleSubmit(e: any) {
+  e.preventDefault()
+
+  // Insert into DB
+  await insertEnquiry()
+
+  alert('Message sent successfully!')
+  resetForm()
+}
 
   /* ---------------- WHATSAPP ---------------- */
-  function handleWhatsApp() {
-    const text = `
- *New Enquiry From Website*
+async function handleWhatsApp() {
+  // Insert into DB first
+  await insertEnquiry()
 
- Hey Thuli Team, I would like to get in touch regarding a ${form.enquiryType} enquiry. Here are my details:
+  // WhatsApp message
+  const text = `
+Hi Thuli Team! I want to enquire about ${form.enquiryType} - ${form.enquiryItem || 'Other'}.
+Name: ${form.name}
+Mobile: ${form.mobile}
+Email: ${form.email || 'Not provided'}
+Message: ${form.message}
+  `.trim()
 
- Name: ${form.name}
- Mobile: ${form.mobile}
- Email: ${form.email || 'Not provided'}
+  const url = `https://wa.me/917092097170?text=${encodeURIComponent(text)}`
+  window.open(url, '_blank')
 
-Enquiry Type: ${form.enquiryType}
-Interested In: ${form.enquiryItem || 'Other'}
-
-Message:
-${form.message}
-    `.trim()
-
-    const url = `https://wa.me/917092097170?text=${encodeURIComponent(text)}`
-    window.open(url, '_blank')
-  }
+  // Optional: reset form
+  resetForm()
+}
 
   function resetForm() {
     setForm({
@@ -263,40 +290,55 @@ ${form.message}
                 onChange={e => setForm({ ...form, email: e.target.value })}
               />
 
-              {/* Enquiry Type */}
-              <select
-                required
-                className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-purple-500"
-                value={form.enquiryType}
-                onChange={e =>
-                  setForm({ ...form, enquiryType: e.target.value, enquiryItem: '' })
-                }
-              >
-                <option value="">Select Enquiry Type</option>
-                <option value="course">Course</option>
-                <option value="solutions">Solutions</option>
-                <option value="tuitions">Tuitions</option>
-              </select>
+              {/* ================= Enquiry Type Listbox ================= */}
+<Listbox value={form.enquiryType} onChange={(val) => setForm({ ...form, enquiryType: val, enquiryItem: '' })}>
+  <div className="relative">
+    <Listbox.Button className="w-full p-4 rounded-xl border border-gray-300 bg-white text-gray-900 text-base flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+      {form.enquiryType || 'Select Enquiry Type'}
+      <HiChevronDown className="w-5 h-5 text-gray-500" />
+    </Listbox.Button>
+    <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+      <Listbox.Options className="absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none z-50">
+        <Listbox.Option value="course" className={({ active }) => `cursor-pointer select-none relative py-2 px-4 ${active ? 'bg-purple-100 text-purple-900' : 'text-gray-900'}`}>
+          Course
+        </Listbox.Option>
+        <Listbox.Option value="solutions" className={({ active }) => `cursor-pointer select-none relative py-2 px-4 ${active ? 'bg-purple-100 text-purple-900' : 'text-gray-900'}`}>
+          Solutions
+        </Listbox.Option>
+        <Listbox.Option value="tuitions" className={({ active }) => `cursor-pointer select-none relative py-2 px-4 ${active ? 'bg-purple-100 text-purple-900' : 'text-gray-900'}`}>
+          Tuitions
+        </Listbox.Option>
+      </Listbox.Options>
+    </Transition>
+  </div>
+</Listbox>
 
-              {/* Conditional Dropdown */}
-              {form.enquiryType && (
-                <select
-                  className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-purple-500"
-                  value={form.enquiryItem}
-                  onChange={e => setForm({ ...form, enquiryItem: e.target.value })}
-                >
-                  <option value="">Select Option</option>
-                  {filteredOptions().map((item: any) => (
-                    <option key={item.id} value={item.title}>
-                      {item.title}
-                    </option>
-                  ))}
-                  <option value="Other">Other</option>
-                </select>
-              )}
+{/* ================= Conditional Dropdown (Enquiry Item) ================= */}
+{form.enquiryType && (
+  <Listbox value={form.enquiryItem} onChange={(val) => setForm({ ...form, enquiryItem: val })}>
+    <div className="relative mt-2">
+      <Listbox.Button className="w-full p-4 rounded-xl border border-gray-300 bg-white text-gray-900 text-base flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+        {form.enquiryItem || 'Select Option'}
+        <HiChevronDown className="w-5 h-5 text-gray-500" />
+      </Listbox.Button>
+      <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+        <Listbox.Options className="absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-xl py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none z-50">
+          {filteredOptions().map((item: any) => (
+            <Listbox.Option key={item.id} value={item.title} className={({ active }) => `cursor-pointer select-none relative py-2 px-4 ${active ? 'bg-purple-100 text-purple-900' : 'text-gray-900'}`}>
+              {item.title}
+            </Listbox.Option>
+          ))}
+          <Listbox.Option value="Other" className={({ active }) => `cursor-pointer select-none relative py-2 px-4 ${active ? 'bg-purple-100 text-purple-900' : 'text-gray-900'}`}>
+            Other
+          </Listbox.Option>
+        </Listbox.Options>
+      </Transition>
+    </div>
+  </Listbox>
+)}
+
 
               <textarea
-                required
                 rows={4}
                 placeholder="Your Message"
                 className="w-full p-4 rounded-xl border focus:ring-2 focus:ring-purple-500"
@@ -310,7 +352,7 @@ ${form.message}
                   type="submit"
                   className="bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold py-4 rounded-xl shadow-lg hover:scale-105 transition"
                 >
-                  Send Email
+                  Submit
                 </button>
 
                 <button
@@ -319,7 +361,7 @@ ${form.message}
                   className="bg-green-500 text-white font-semibold py-4 rounded-xl shadow-lg hover:scale-105 transition flex items-center justify-center gap-2"
                 >
                   <FaWhatsapp className="text-xl" />
-                  Send Message (Faster)
+                  Whatsapp (Faster)
                 </button>
               </div>
 
