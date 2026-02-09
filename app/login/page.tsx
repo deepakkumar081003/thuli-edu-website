@@ -3,6 +3,7 @@
 import { supabaseBrowser } from '@/lib/supabaseBrowser'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -16,7 +17,7 @@ export default function Login() {
 
     const { data, error } = await supabaseBrowser.auth.signInWithPassword({
       email,
-      password
+      password,
     })
 
     if (error || !data.user) {
@@ -25,7 +26,6 @@ export default function Login() {
       return
     }
 
-    // ✅ Fetch role AFTER login
     const { data: profile, error: profileError } = await supabaseBrowser
       .from('profiles')
       .select('role')
@@ -39,7 +39,6 @@ export default function Login() {
       return
     }
 
-    // ✅ Correct redirect
     if (profile.role === 'admin') {
       router.replace('/admin')
     } else {
@@ -48,33 +47,63 @@ export default function Login() {
   }
 
   return (
-    <section className="px-12 py-16 max-w-md mx-auto">
-      <h2 className="text-3xl font-bold text-primary">Login</h2>
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 flex items-center justify-center px-6">
 
-      <form onSubmit={handleLogin} className="mt-6 space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-3 border"
-          required
-          onChange={e => setEmail(e.target.value)}
-        />
+      {/* LOGIN CARD */}
+      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 overflow-hidden">
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 border"
-          required
-          onChange={e => setPassword(e.target.value)}
-        />
+        {/* Decorative blobs */}
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-yellow-400 rounded-full opacity-20"></div>
+        <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-purple-900 rounded-full opacity-10"></div>
 
-        <button
-          disabled={loading}
-          className="bg-primary text-white px-6 py-3 w-full rounded disabled:opacity-60"
-        >
-          {loading ? 'Logging in…' : 'Login'}
-        </button>
-      </form>
-    </section>
+        <div className="relative z-10 text-center">
+          <p className="text-yellow-400 font-semibold mb-2">
+            Welcome Back 👋
+          </p>
+
+          <h2 className="text-3xl font-bold text-purple-900 mb-2">
+            Login to Your Account
+          </h2>
+
+          <p className="text-gray-600 mb-8">
+            Continue learning and building real-world projects
+          </p>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-5 relative z-10">
+          <input
+            type="email"
+            placeholder="Email address"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          <button
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold py-4 rounded-xl shadow-lg hover:scale-105 transition-transform disabled:opacity-60"
+          >
+            {loading ? 'Logging in…' : 'Login'}
+          </button>
+        </form>
+
+        <div className="relative z-10 text-center mt-6">
+          <p className="text-sm text-gray-600">
+            Don’t have an account?{' '}
+            <Link href="/register" className="text-purple-700 font-semibold hover:underline">
+              Register
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }

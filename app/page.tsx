@@ -7,7 +7,7 @@ import { FaLaptopCode, FaChalkboardTeacher } from 'react-icons/fa'
 export default async function Home() {
   const { data: products } = await supabase
     .from('products')
-    .select('id, title, short_description, image_url')
+    .select('id, title, slug, short_description, image_url')
     .limit(9)
 
   const { data: tuitions } = await supabase
@@ -135,6 +135,68 @@ export default async function Home() {
         <div className="absolute -top-16 -left-16 w-64 h-64 bg-yellow-400 rounded-full opacity-20"></div>
         <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-purple-900 rounded-full opacity-10"></div>
       </section>
+
+      {/* SOLUTIONS HERO SECTION */}
+<section className="px-16 md:px-32 py-24 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
+  
+  {/* subtle tech grid pattern */}
+  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.08)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+
+  <div className="relative max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+
+    {/* Left Side - Icon/Illustration */}
+    <div className="md:w-1/2 flex justify-center md:justify-start">
+      <div className="bg-purple-100 p-16 rounded-3xl shadow-2xl flex items-center justify-center text-purple-700 text-9xl hover:scale-105 transition-transform">
+        <HiDesktopComputer />
+      </div>
+    </div>
+
+    {/* Right Side - Text */}
+    <div className="md:w-1/2 text-center md:text-left">
+      <p className="text-yellow-400 font-semibold text-lg mb-2">
+        We don’t just teach, we build!
+      </p>
+
+      <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-4 leading-snug">
+        Software Solutions, Websites & Mobile Apps
+      </h2>
+
+      <p className="text-purple-900 text-lg mb-6">
+  Collaborate with experts and turn ideas into real-world projects.
+</p>
+
+<div className="flex flex-col gap-4 items-center md:items-start">
+  <Link
+    href="/solutions"
+    className="inline-block bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform"
+  >
+    Build Yours Now
+  </Link>
+
+  <div className="text-center md:text-left">
+    <p className="text-purple-700 font-medium mb-2">
+     Learn by building products that matter.  Want to join us to work on real-time projects?
+    </p>
+    <Link
+      href="/contact"
+      className="inline-block bg-yellow-400 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform"
+    >
+      Join Us
+    </Link>
+  </div>
+</div>
+
+    </div>
+
+  </div>
+
+  {/* angled accents instead of round blobs */}
+  <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-200 opacity-20 rotate-12 rounded-3xl"></div>
+  <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-300 opacity-15 -rotate-12 rounded-3xl"></div>
+
+</section>
+
+
 
           {/* WHY THULI */}
   <section className="px-16 md:px-32 py-24 bg-white">

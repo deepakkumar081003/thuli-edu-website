@@ -3,7 +3,8 @@
 import { supabaseBrowser } from '@/lib/supabaseBrowser'
 import { useEffect, useState } from 'react'
 import BlogModal from './BlogModal'
-import DeleteModal from './DeleteModal'
+import DeleteBlogModal from './DeleteModal'
+import { HiPencilAlt, HiTrash } from 'react-icons/hi'
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([])
@@ -16,12 +17,12 @@ export default function AdminBlogsPage() {
   async function fetchBlogs() {
     setLoading(true)
 
-    const { data, error } = await supabaseBrowser
+    const { data } = await supabaseBrowser
       .from('blogs')
       .select('*')
       .order('created_at', { ascending: false })
 
-    if (!error) setBlogs(data || [])
+    setBlogs(data || [])
     setLoading(false)
   }
 
@@ -30,68 +31,107 @@ export default function AdminBlogsPage() {
   }, [])
 
   return (
-    <section className="p-10">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Blogs</h1>
+    <section className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 px-12 md:px-32 py-30">
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+        <div>
+          <h1 className="text-4xl font-bold text-purple-900 mb-2">
+            Blogs
+          </h1>
+          <p className="text-yellow-400 text-lg">
+            Manage articles & content
+          </p>
+        </div>
 
         <button
           onClick={() => {
             setEditingBlog(null)
             setShowModal(true)
           }}
-          className="bg-primary text-white px-4 py-2 rounded"
+          className="mt-4 md:mt-0 bg-gradient-to-r from-purple-600 to-indigo-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:scale-105 transition-transform"
         >
           + Add Blog
         </button>
       </div>
 
+      {/* Content */}
       {loading ? (
-        <p className="mt-6">Loading...</p>
+        <p>Loading...</p>
+      ) : blogs.length === 0 ? (
+        <p className="text-gray-500">No blogs found</p>
       ) : (
-        <table className="mt-6 w-full border">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-3 text-left">Title</th>
-              <th className="p-3">Slug</th>
-              <th className="p-3">Published</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.map(blog => (
+            <div
+              key={blog.id}
+              className="group bg-gradient-to-br from-white via-purple-50 to-indigo-50 rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden border border-purple-100"
+            >
+              {/* Image */}
+              <div className="h-40 bg-gray-100 overflow-hidden">
+                {blog.cover_image ? (
+                  <img
+                    src={blog.cover_image}
+                    alt={blog.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                    No Image
+                  </div>
+                )}
+              </div>
 
-          <tbody>
-            {blogs.map(blog => (
-              <tr key={blog.id} className="border-t">
-                <td className="p-3">{blog.title}</td>
-                <td className="p-3 text-sm text-gray-600">
-                  {blog.slug}
-                </td>
-                <td className="p-3">
-                  {blog.is_published ? 'Yes' : 'No'}
-                </td>
-                <td className="p-3 space-x-2">
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-purple-900 truncate">
+                  {blog.title}
+                </h3>
+
+                <p className="text-sm text-gray-600 mt-1">
+                  /{blog.slug}
+                </p>
+
+                <div className="mt-3 flex justify-between items-center">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      blog.is_published
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}
+                  >
+                    {blog.is_published ? 'Published' : 'Draft'}
+                  </span>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-5 flex gap-2">
                   <button
                     onClick={() => {
                       setEditingBlog(blog)
                       setShowModal(true)
                     }}
-                    className="px-3 py-1 bg-blue-500 text-white rounded"
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-indigo-500 text-white rounded-xl text-sm font-semibold hover:scale-105 transition"
                   >
+                    <HiPencilAlt />
                     Edit
                   </button>
 
                   <button
                     onClick={() => setDeleteBlog(blog)}
-                    className="px-3 py-1 bg-red-500 text-white rounded"
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-red-500 text-white rounded-xl text-sm font-semibold hover:scale-105 transition"
                   >
+                    <HiTrash />
                     Delete
                   </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
+      {/* Modals */}
       {showModal && (
         <BlogModal
           blog={editingBlog}
@@ -101,7 +141,7 @@ export default function AdminBlogsPage() {
       )}
 
       {deleteBlog && (
-        <DeleteModal
+        <DeleteBlogModal
           blog={deleteBlog}
           onClose={() => setDeleteBlog(null)}
           onDeleted={fetchBlogs}

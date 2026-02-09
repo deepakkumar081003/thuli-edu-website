@@ -3,7 +3,13 @@
 import { useState } from 'react'
 import { supabaseBrowser } from '@/lib/supabaseBrowser'
 
-export default function TuitionModal({ tuition, onClose, onSaved }: any) {
+export default function TuitionModal({
+  tuition,
+  onClose,
+  onSaved,
+}: any) {
+  const isEdit = !!tuition
+
   const [title, setTitle] = useState(tuition?.title || '')
   const [classLevel, setClassLevel] = useState(tuition?.class_level || '')
   const [subject, setSubject] = useState(tuition?.subject || '')
@@ -13,9 +19,15 @@ export default function TuitionModal({ tuition, onClose, onSaved }: any) {
   const [description, setDescription] = useState(tuition?.description || '')
   const [active, setActive] = useState(tuition?.is_active ?? true)
 
-  async function handleSave() {
+  const [saving, setSaving] = useState(false)
+
+  async function handleSave(e: any) {
+    e.preventDefault()
+    setSaving(true)
+
     if (!title) {
       alert('Title is required')
+      setSaving(false)
       return
     }
 
@@ -30,61 +42,131 @@ export default function TuitionModal({ tuition, onClose, onSaved }: any) {
       is_active: active,
     }
 
-    if (tuition?.id) {
-      await supabaseBrowser
-        .from('tuitions')
-        .update(payload)
-        .eq('id', tuition.id)
-    } else {
-      await supabaseBrowser.from('tuitions').insert(payload)
+    try {
+      if (isEdit) {
+        await supabaseBrowser
+          .from('tuitions')
+          .update(payload)
+          .eq('id', tuition.id)
+      } else {
+        await supabaseBrowser.from('tuitions').insert(payload)
+      }
+
+      onSaved()
+      onClose()
+    } catch (err: any) {
+      alert(err.message)
     }
 
-    onSaved()
-    onClose()
+    setSaving(false)
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white p-6 w-[400px] space-y-3">
-        <h2 className="text-xl font-bold">
-          {tuition ? 'Edit Tuition' : 'Add Tuition'}
-        </h2>
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4">
 
-        <input placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-        <input placeholder="Class Level" value={classLevel} onChange={e => setClassLevel(e.target.value)} />
-        <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
+      <form
+        onSubmit={handleSave}
+        className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 space-y-6"
+      >
+        {/* Header */}
+        <div>
+          <h2 className="text-3xl font-bold text-purple-900">
+            {isEdit ? 'Edit Tuition' : 'Add Tuition'}
+          </h2>
+          <p className="text-yellow-400 mt-1">
+            Enter tuition batch details
+          </p>
+        </div>
 
-        <select value={mode} onChange={e => setMode(e.target.value)}>
-          <option value="">Select Mode</option>
-          <option value="Online">Online</option>
-          <option value="Offline">Offline</option>
-        </select>
+        {/* Fields */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            required
+          />
 
-        <input placeholder="Timings" value={timings} onChange={e => setTimings(e.target.value)} />
-        <input placeholder="Fees" type="number" value={fees} onChange={e => setFees(e.target.value)} />
+          <input
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Class Level (eg: Class 10)"
+            value={classLevel}
+            onChange={e => setClassLevel(e.target.value)}
+          />
 
+          <input
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Subject"
+            value={subject}
+            onChange={e => setSubject(e.target.value)}
+          />
+
+          <select
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            value={mode}
+            onChange={e => setMode(e.target.value)}
+          >
+            <option value="">Select Mode</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+          </select>
+
+          <input
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Timings (eg: Mon–Fri 5–6 PM)"
+            value={timings}
+            onChange={e => setTimings(e.target.value)}
+          />
+
+          <input
+            type="number"
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Fees (₹)"
+            value={fees}
+            onChange={e => setFees(e.target.value)}
+          />
+        </div>
+
+        {/* Description */}
         <textarea
+          className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+          rows={4}
           placeholder="Description"
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
 
-        <label className="flex gap-2 items-center">
-          <input
-            type="checkbox"
-            checked={active}
-            onChange={e => setActive(e.target.checked)}
-          />
-          Active
-        </label>
+        {/* Active */}
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 font-medium text-purple-900">
+            <input
+              type="checkbox"
+              checked={active}
+              onChange={e => setActive(e.target.checked)}
+            />
+            Active
+          </label>
+        </div>
 
-        <div className="flex justify-end gap-2">
-          <button onClick={onClose}>Cancel</button>
-          <button className="bg-black text-white px-3 py-1" onClick={handleSave}>
-            Save
+        {/* Actions */}
+        <div className="flex justify-end gap-4 pt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-6 py-3 rounded-lg border font-semibold hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            disabled={saving}
+            className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold shadow-lg hover:scale-105 transition-transform disabled:opacity-60"
+          >
+            {saving ? 'Saving...' : 'Save Tuition'}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   )
 }
