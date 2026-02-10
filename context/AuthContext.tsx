@@ -7,17 +7,40 @@ const AuthContext = createContext<any>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
+  async function loadProfile(userId: string) {
+    const { data } = await supabaseBrowser
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+
+    setProfile(data)
+  }
+
   useEffect(() => {
-    supabaseBrowser.auth.getUser().then(({ data }) => {
+    supabaseBrowser.auth.getUser().then(async ({ data }) => {
       setUser(data.user)
+
+      if (data.user) {
+        await loadProfile(data.user.id)
+      }
+
       setLoading(false)
     })
 
     const { data: listener } = supabaseBrowser.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
+      async (_event, session) => {
+        const user = session?.user ?? null
+        setUser(user)
+
+        if (user) {
+          await loadProfile(user.id)
+        } else {
+          setProfile(null)
+        }
       }
     )
 
@@ -25,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, profile, loading }}>
       {children}
     </AuthContext.Provider>
   )

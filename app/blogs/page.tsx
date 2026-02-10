@@ -4,8 +4,10 @@ import { FaBookOpen } from 'react-icons/fa'
 
 export default async function BlogsPage() {
   const { data, error } = await supabase
-    .from('blogs')
-    .select('*')
+  .from('blogs')
+  .select('*')
+  .order('created_at', { ascending: false })
+
 
   if (error) {
     return (

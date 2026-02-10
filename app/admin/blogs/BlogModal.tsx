@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabaseBrowser } from '@/lib/supabaseBrowser'
+import { updateBlog } from './actions'
 
 export default function BlogModal({ blog, onClose, onSaved }: any) {
   const isEdit = !!blog
@@ -52,18 +53,27 @@ export default function BlogModal({ blog, onClose, onSaved }: any) {
       is_published: published,
     }
 
-    const query = isEdit
-      ? supabaseBrowser.from('blogs').update(payload).eq('id', blog.id)
-      : supabaseBrowser.from('blogs').insert(payload)
+    try {
+  if (isEdit) {
+    await updateBlog(blog.id, payload)
+  } else {
+    const { error } = await supabaseBrowser
+      .from('blogs')
+      .insert(payload)
 
-    const { error } = await query
+    if (error) throw error
+  }
 
-    if (!error) {
-      onSaved()
-      onClose()
-    } else {
-      alert(error.message)
-    }
+  // ✅ CLOSE MODAL + REFRESH LIST
+  onSaved()
+  onClose()
+} catch (err: any) {
+  alert(err.message || 'Something went wrong')
+} finally {
+  setSaving(false)
+}
+
+
 
     setSaving(false)
   }

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 import { HiAcademicCap, HiDesktopComputer, HiClipboardCheck, HiCurrencyDollar, HiClock, HiLightBulb } from 'react-icons/hi'
 import CoursesCarousel from '@/components/CoursesCarousel'
-import { FaLaptopCode, FaChalkboardTeacher } from 'react-icons/fa'
+import { FaLaptopCode, FaChalkboardTeacher, FaRupeeSign  } from 'react-icons/fa'
 
 export default async function Home() {
   const { data: products } = await supabase
@@ -17,8 +17,10 @@ export default async function Home() {
 
   const { data: blogs } = await supabase
     .from('blogs')
-    .select('id, title, content, cover_image')
+    .select('id, title, slug, content, cover_image')
+    .order('created_at', { ascending: false })
     .limit(3)
+
 
   return (
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
@@ -52,30 +54,38 @@ export default async function Home() {
       </section>
 
       {/* FEATURES SECTION */}
-      <section className="px-16 md:px-32 py-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 text-center">
-          {[
-            { icon: <HiAcademicCap />, title: 'Experts as Trainers' },
-            { icon: <HiDesktopComputer />, title: 'LIVE Project' },
-            { icon: <HiClipboardCheck />, title: 'Certification' },
-            { icon: <HiCurrencyDollar />, title: 'Affordable Fees' },
-            { icon: <HiClock />, title: 'Flexibility' },
-            { icon: <HiLightBulb />, title: 'Easy Learning' },
-          ].map((f, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition hover:scale-105 p-6 flex flex-col items-center justify-center"
-            >
-              <div className="bg-purple-900 text-white w-14 h-14 rounded-lg flex items-center justify-center mb-3 text-3xl">
-                {f.icon}
-              </div>
-              <h3 className="text-purple-900 font-semibold text-lg md:text-base">
-                {f.title}
-              </h3>
-            </div>
-          ))}
+<section className="px-16 md:px-32 py-10">
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 text-center">
+    {[
+      { icon: <HiAcademicCap />, title: 'Experts as Trainers' },
+      { icon: <HiDesktopComputer />, title: 'Live Projects' },
+      { icon: <HiClipboardCheck />, title: 'Certification' },
+      { 
+        icon: <FaRupeeSign className="text-[0.85em]" />, 
+        title: 'Affordable Fees' 
+      },
+      { icon: <HiClock />, title: 'Flexible Schedule' },
+      { icon: <HiLightBulb />, title: 'Easy Learning' },
+
+    ].map((f, i) => (
+      <div
+        key={i}
+        className="flex flex-col items-center justify-center gap-3 group"
+      >
+        {/* Icon */}
+        <div className="text-purple-700 text-4xl md:text-5xl group-hover:scale-110 transition-transform">
+          {f.icon}
         </div>
-      </section>
+
+        {/* Text */}
+        <h3 className="text-purple-900 font-semibold text-base md:text-lg tracking-wide">
+          {f.title}
+        </h3>
+      </div>
+    ))}
+  </div>
+</section>
+
 
       {/* COURSES SECTION */}
       <section className="px-16 md:px-32 py-16">
@@ -255,7 +265,7 @@ export default async function Home() {
                   {b.content && b.content.length > 150 ? '...' : ''}
                 </p>
                 <Link
-                  href={`/blogs/${b.id}`}
+                  href={`/blogs/${b.slug}`}
                   className="inline-block mt-6 text-yellow-400 font-semibold text-lg hover:underline"
                 >
                   Read More →

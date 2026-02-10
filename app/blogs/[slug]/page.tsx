@@ -50,9 +50,9 @@ export default async function BlogPage({ params }: { params: Promise<{ slug: str
               alt={blog.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white/80"></div>
           </div>
         )}
+
 
         {/* Content */}
         <div className="p-8 md:p-12 text-center md:text-left animate-fadeIn">
