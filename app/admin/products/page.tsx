@@ -117,19 +117,26 @@ const solutions = products.filter(
             </p>
 
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-indigo-600 font-semibold">
-                {product.price ? `₹${product.price}` : 'Free'}
-              </span>
+              <div className="flex flex-col">
+                {product.discounted_price ? (
+                  <div className="flex items-center gap-2">
+                    {/* Original Price - Striked Red */}
+                    <span className="text-sm line-through text-red-500 font-semibold">
+                      ₹{product.price}
+                    </span>
 
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  product.is_active
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                }`}
-              >
-                {product.is_active ? 'Active' : 'Inactive'}
-              </span>
+                    {/* Discounted Price - Green */}
+                    <span className="text-lg font-bold text-green-600">
+                      ₹{product.discounted_price}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-indigo-600 font-semibold">
+                    {product.price ? `₹${product.price}` : 'Free'}
+                  </span>
+                )}
+              </div>
+
             </div>
 
             {/* Actions */}
@@ -206,9 +213,25 @@ const solutions = products.filter(
             </p>
 
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-indigo-600 font-semibold">
-                {product.price ? `₹${product.price}` : 'Custom'}
-              </span>
+              <div className="flex flex-col">
+                {product.discounted_price ? (
+                  <div className="flex items-center gap-2">
+                    {/* Original Price - Striked Red */}
+                    <span className="text-sm line-through text-red-500 font-semibold">
+                      ₹{product.price}
+                    </span>
+
+                    {/* Discounted Price - Green */}
+                    <span className="text-lg font-bold text-green-600">
+                      ₹{product.discounted_price}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-indigo-600 font-semibold">
+                    {product.price ? `₹${product.price}` : 'Custom'}
+                  </span>
+                )}
+              </div>
 
               <span
                 className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -220,6 +243,7 @@ const solutions = products.filter(
                 {product.is_active ? 'Active' : 'Inactive'}
               </span>
             </div>
+
 
             {/* Actions */}
             <div className="mt-5 flex gap-2">

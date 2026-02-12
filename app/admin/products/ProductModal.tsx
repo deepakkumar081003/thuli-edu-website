@@ -30,18 +30,27 @@ export default function ProductModal({
   const [duration, setDuration] = useState(product?.duration || '')
   const [level, setLevel] = useState(product?.level || '')
 
+  const [discountedPrice, setDiscountedPrice] = useState(
+  product?.discounted_price || ''
+)
+
+
   useEffect(() => {
-    async function loadCategories() {
-      const { data } = await supabaseBrowser
-        .from('categories')
-        .select('id, name')
-        .order('name')
+  async function loadCategories() {
+    const { data, error } = await supabaseBrowser
+      .from('categories')
+      .select('id, name')
+      .order('name')
 
-      setCategories(data || [])
-    }
+    console.log('Categories:', data)
+    console.log('Error:', error)
 
-    loadCategories()
-  }, [])
+    setCategories(data || [])
+  }
+
+  loadCategories()
+}, [])
+
 
   async function handleSave(e: any) {
     e.preventDefault()
@@ -71,6 +80,7 @@ export default function ProductModal({
       title,
       slug,
       price: price || null,
+      discounted_price: discountedPrice || null,
       image_url: imageUrl,
       is_active: active,
       category_id: categoryId || null,
@@ -79,6 +89,7 @@ export default function ProductModal({
       duration: duration || null,
       level: level || null,
     }
+
 
     try {
       if (isEdit) {
@@ -138,6 +149,15 @@ export default function ProductModal({
             value={price}
             onChange={e => setPrice(e.target.value)}
           />
+
+          <input
+            type="number"
+            className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"
+            placeholder="Discounted Price (₹)"
+            value={discountedPrice}
+            onChange={e => setDiscountedPrice(e.target.value)}
+          />
+
 
           <select
             className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none"

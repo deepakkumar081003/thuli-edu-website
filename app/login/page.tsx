@@ -4,12 +4,28 @@ import { supabaseBrowser } from '@/lib/supabaseBrowser'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { FcGoogle } from 'react-icons/fc'
+
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  const handleGoogleLogin = async () => {
+  await supabaseBrowser.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${location.origin}/auth/callback`,
+      queryParams: {
+        prompt: 'select_account'
+      }
+    }
+  })
+}
+
+
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -42,8 +58,9 @@ export default function Login() {
     if (profile.role === 'admin') {
       router.replace('/admin')
     } else {
-      router.replace('/')
+      router.replace('/my-dashboard')
     }
+
   }
 
   return (
@@ -93,6 +110,19 @@ export default function Login() {
           >
             {loading ? 'Logging in…' : 'Login'}
           </button>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 font-semibold py-4 rounded-xl shadow hover:bg-gray-50 transition disabled:opacity-60"
+          >
+            <FcGoogle className="text-xl" />
+            Continue with Google
+          </button>
+
+
+
         </form>
 
         <div className="relative z-10 text-center mt-6">

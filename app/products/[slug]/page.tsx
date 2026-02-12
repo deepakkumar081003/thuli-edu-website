@@ -1,5 +1,7 @@
 import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
+import BuyNowButton from '@/components/BuyNowButton'
+
 
 interface Props {
   params: {
@@ -15,6 +17,8 @@ export default async function CourseDetailPage({ params }: Props) {
     .select('*')
     .eq('slug', slug)
     .single()
+
+  console.log(course);
 
   if (error || !course) {
     return (
@@ -60,18 +64,49 @@ export default async function CourseDetailPage({ params }: Props) {
             🎯 {course.level}
           </span>
         )}
-        {course.price && (
+        {course.price && course.discounted_price ? (
+          <div className="flex items-center gap-3">
+            <span className="bg-green-100 px-4 py-2 rounded-full text-green-700 font-bold text-lg">
+              ₹{course.discounted_price}
+            </span>
+
+            <span className="text-gray-400 line-through text-lg">
+              ₹{course.price}
+            </span>
+
+            <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold shadow">
+              {Math.round(
+                ((Number(course.price) - Number(course.discounted_price)) /
+                  Number(course.price)) *
+                  100
+              )}
+              % OFF
+            </span>
+          </div>
+        ) : course.price ? (
           <span className="bg-green-100 px-4 py-2 rounded-full text-green-700 font-semibold">
             ₹{course.price}
           </span>
-        )}
+        ) : null}
+
+
       </div>
 
+     
+
       <div className="flex gap-4 flex-wrap">
+
+         <BuyNowButton
+        productId={course.id}
+        title={course.title}
+        price={course.discounted_price || course.price}
+      />
+
+
         {/* WhatsApp Enroll Button */}
         <a
           href={`https://wa.me/917092097170?text=${encodeURIComponent(
-            `Hi! I'm interested in enrolling in the "${course.title}" course.\n\nCourse Details:\n- Duration: ${course.duration || 'N/A'}\n- Level: ${course.level || 'N/A'}\n- Price: ₹${course.price || 'N/A'}\n\nCould you please provide more information about the enrollment process?`
+            `Hi! I'm interested in enrolling in the "${course.title}" course.\n\nCourse Details:\n- Duration: ${course.duration || 'N/A'}\n- Level: ${course.level || 'N/A'}\n- Price: ₹${course.discount_price || course.price || 'N/A'}\n\nCould you please provide more information about the enrollment process?`
           )}`}
           target="_blank"
           rel="noopener noreferrer"

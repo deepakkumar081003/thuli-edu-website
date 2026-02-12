@@ -37,9 +37,7 @@ export default function Navbar() {
     </span>
   </div>
 </Link>
-
   
-
   {/* Mobile Menu Button */}
   <button
     className="md:hidden text-2xl focus:outline-none"
@@ -62,6 +60,15 @@ export default function Navbar() {
     `}
   >
 
+    {user && profile?.role === 'student' && (
+      <Link
+        href="/my-dashboard"
+        className="px-4 py-2 hover:text-yellow-400 transition"
+      >
+        My Dashboard
+      </Link>
+    )}
+
     {[
       ['/', 'Home'],
       ['/about', 'About'],
@@ -79,6 +86,9 @@ export default function Navbar() {
         {label}
       </Link>
     ))}
+
+    
+
 
     {!user && (
       <>

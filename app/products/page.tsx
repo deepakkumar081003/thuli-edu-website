@@ -10,6 +10,7 @@ export default async function CoursesPage() {
     slug,
     short_description,
     price,
+    discounted_price,
     image_url,
     categories!inner (
       name
@@ -100,24 +101,44 @@ export default async function CoursesPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-6">
-                  {course.price ? (
-                    <span className="text-lg font-bold text-green-600">
-                      ₹{course.price}
-                    </span>
-                  ) : (
-                    <span className="text-sm text-gray-500">
-                      Free
-                    </span>
-                  )}
+                  <div>
+                    {course.discounted_price ? (
+                      <div className="flex items-center gap-2">
+                        {/* Discounted Price */}
+                        <span className="text-lg font-bold text-green-600">
+                          ₹{course.discounted_price}
+                        </span>
+
+                        {/* Original Price */}
+                        <span className="text-sm text-gray-400 line-through">
+                          ₹{course.price}
+                        </span>
+
+                        {/* % Badge */}
+                        <span className="bg-red-100 text-red-600 text-xs font-semibold px-2 py-1 rounded-full">
+                          {Math.round(
+                            ((course.price - course.discounted_price) / course.price) * 100
+                          )}
+                          % OFF
+                        </span>
+                      </div>
+                    ) : course.price ? (
+                      <span className="text-lg font-bold text-green-600">
+                        ₹{course.price}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-gray-500">Free</span>
+                    )}
+                  </div>
 
                   <Link
                     href={`/products/${course.slug}`}
                     className="text-purple-700 font-semibold hover:underline"
                   >
-
                     View Details →
                   </Link>
                 </div>
+
               </div>
             </div>
           ))}

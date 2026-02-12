@@ -1,6 +1,8 @@
 'use server'
 
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { revalidatePath } from 'next/cache'
+
 
 export async function createProduct(data: any) {
   const { error } = await supabaseAdmin
@@ -11,9 +13,14 @@ export async function createProduct(data: any) {
     console.error('CREATE PRODUCT ERROR:', error)
     throw new Error(error.message)
   }
+
+  revalidatePath('/admin/products')
+  revalidatePath('/courses')
+  revalidatePath('/solutions')
 }
 
-export async function updateProduct(id: number, data: any) {
+
+export async function updateProduct(id: string, data: any) {
   // 1. Fetch existing product
   const { data: existingProduct, error: fetchError } = await supabaseAdmin
     .from('products')
@@ -56,9 +63,15 @@ export async function updateProduct(id: number, data: any) {
     console.error('UPDATE PRODUCT ERROR:', updateError)
     throw new Error(updateError.message)
   }
+
+revalidatePath('/admin/products')
+revalidatePath('/courses')
+revalidatePath('/solutions')
+
+
 }
 
-export async function deleteProduct(id: number) {
+export async function deleteProduct(id: string) {
   // 1. Fetch product to get image URL
   const { data: product, error: fetchError } = await supabaseAdmin
     .from('products')
@@ -101,4 +114,10 @@ export async function deleteProduct(id: number) {
     console.error('DELETE PRODUCT ERROR:', deleteError)
     throw new Error(deleteError.message)
   }
+
+revalidatePath('/admin/products')
+revalidatePath('/courses')
+revalidatePath('/solutions')
+
+
 }

@@ -13,7 +13,9 @@ export default async function SolutionsPage() {
         id,
         title,
         short_description,
-        image_url
+        image_url,
+        price,
+        discounted_price
       )
     `)
     .neq('name', 'Course')
@@ -105,6 +107,36 @@ const sortedCategories = categories?.sort(
               <p className="text-gray-600 text-sm mt-3 flex-1">
                 {product.short_description}
               </p>
+
+              {product.price && product.discounted_price ? (
+                <div className="mt-3 flex items-center gap-2 flex-wrap">
+                  {/* Discounted Price */}
+                  <span className="text-lg font-bold text-indigo-600">
+                    Starting from ₹{product.discounted_price}
+                  </span>
+
+                  {/* Original Price */}
+                  <span className="text-sm text-gray-400 line-through">
+                    ₹{product.price}
+                  </span>
+
+                  {/* % OFF Badge */}
+                  <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                    {Math.round(
+                      ((Number(product.price) - Number(product.discounted_price)) /
+                        Number(product.price)) *
+                        100
+                    )}
+                    % OFF
+                  </span>
+                </div>
+              ) : product.price ? (
+                <p className="mt-3 text-lg font-bold text-indigo-600">
+                  Starting from ₹{product.price}
+                </p>
+              ) : null}
+
+
 
               {/* Build Now Button */}
               <a
