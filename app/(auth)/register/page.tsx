@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Register() {
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -17,8 +19,16 @@ export default function Register() {
 
     const { error } = await supabaseBrowser.auth.signUp({
       email,
-      password
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+        data: {
+          full_name: fullName,
+          phone: phone
+        }
+      }
     })
+
 
     setLoading(false)
 
@@ -28,7 +38,8 @@ export default function Register() {
     }
 
     alert('Registration successful 🎉')
-    router.push('/login')
+    router.push('/verify-email')
+
   }
 
   return (
@@ -36,7 +47,6 @@ export default function Register() {
       
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 border border-purple-100">
         
-        {/* Title */}
         <h2 className="text-4xl font-bold text-purple-900 text-center mb-2">
           Create Account
         </h2>
@@ -44,20 +54,44 @@ export default function Register() {
           Join THULI and start learning 🚀
         </p>
 
-        {/* Form */}
         <form onSubmit={handleRegister} className="space-y-5">
+
+          {/* Full Name */}
+          <input
+            type="text"
+            placeholder="Full Name"
+            required
+            value={fullName}
+            onChange={e => setFullName(e.target.value)}
+            className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          {/* Phone */}
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            required
+            value={phone}
+            onChange={e => setPhone(e.target.value)}
+            className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+
+          {/* Email */}
           <input
             type="email"
             placeholder="Email address"
             required
+            value={email}
             onChange={e => setEmail(e.target.value)}
             className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
+          {/* Password */}
           <input
             type="password"
             placeholder="Password"
             required
+            value={password}
             onChange={e => setPassword(e.target.value)}
             className="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
@@ -70,7 +104,6 @@ export default function Register() {
           </button>
         </form>
 
-        {/* Footer */}
         <p className="text-center text-gray-600 mt-8">
           Already have an account?{' '}
           <Link href="/login" className="text-purple-700 font-semibold hover:underline">

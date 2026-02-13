@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-export default async function LoginLayout({
-  children
+export default async function AuthLayout({
+  children,
 }: {
   children: React.ReactNode
 }) {
@@ -14,16 +14,16 @@ export default async function LoginLayout({
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get: name => cookieStore.get(name)?.value
-      }
+        get: (name: string) => cookieStore.get(name)?.value,
+      },
     }
   )
 
   const {
-    data: { user }
+    data: { user },
   } = await supabase.auth.getUser()
 
-  // ✅ Already logged in → block login page
+  // ✅ If logged in → redirect away from auth pages
   if (user) {
     redirect('/')
   }

@@ -88,18 +88,21 @@ export default function AdminDashboard() {
 </Link>
 
 
-        {/* Users */}
-        <div className="group bg-white rounded-3xl shadow-xl border border-purple-100 p-8 opacity-80">
-          <div className="bg-purple-300 text-white w-14 h-14 rounded-xl flex items-center justify-center mb-6 text-3xl">
-            <HiOutlineUsers />
-          </div>
-          <h2 className="text-2xl font-semibold text-purple-900 mb-2">
-            Users
-          </h2>
-          <p className="text-gray-600">
-            View registered students
-          </p>
-        </div>
+        <Link
+  href="/admin/registrations"
+  className="group bg-white rounded-3xl shadow-xl border border-purple-100 p-8 hover:shadow-2xl transition hover:-translate-y-1"
+>
+  <div className="bg-purple-300 text-white w-14 h-14 rounded-xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition">
+    <HiOutlineUsers />
+  </div>
+  <h2 className="text-2xl font-semibold text-purple-900 mb-2">
+    Registrations
+  </h2>
+  <p className="text-gray-600">
+    View and manage user registrations
+  </p>
+</Link>
+
 
       </div>
 

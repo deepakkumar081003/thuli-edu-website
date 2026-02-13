@@ -53,7 +53,7 @@ export default function MySolutions() {
   if (loading) return <p className="p-6">Loading...</p>
 
   return (
-    <div className="p-8">
+    <div className="p-8 py-30">
       <h1 className="text-2xl font-bold mb-6">My Solutions</h1>
 
       {solutions.length === 0 ? (

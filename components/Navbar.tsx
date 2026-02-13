@@ -93,12 +93,6 @@ export default function Navbar() {
     {!user && (
       <>
         <Link
-          href="/register"
-          className="px-4 py-2 text-yellow-400 font-semibold hover:text-white transition"
-        >
-          Register
-        </Link>
-        <Link
           href="/login"
           className="px-4 py-2 hover:text-yellow-400 transition"
         >

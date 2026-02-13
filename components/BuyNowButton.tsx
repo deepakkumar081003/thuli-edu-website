@@ -79,7 +79,7 @@ const options = {
   return (
     <button
       onClick={handleBuyNow}
-      className="bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-800 transition"
+className="bg-gradient-to-r from-green-400 to-green-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
     >
       Buy Now
     </button>

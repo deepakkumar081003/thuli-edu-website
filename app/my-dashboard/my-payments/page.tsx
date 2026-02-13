@@ -45,7 +45,7 @@ export default function MyPayments() {
   if (loading) return <p className="p-10">Loading payments...</p>
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 px-12 md:px-32 py-20">
+    <section className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 px-12 md:px-32 py-30">
 
       <h1 className="text-4xl font-bold text-purple-900 mb-10">
         My Payments
