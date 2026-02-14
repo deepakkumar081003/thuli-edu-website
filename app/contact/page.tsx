@@ -137,7 +137,7 @@ Message: ${form.message}
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* ================= HERO ================= */}
-      <section className="px-16 md:px-32 py-28 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
+      <section className="px-16 md:px-32 py-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
 
         {/* grid texture */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.08)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>

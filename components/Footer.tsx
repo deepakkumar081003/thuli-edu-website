@@ -1,32 +1,90 @@
+'use client'
+
 import Link from 'next/link'
 import { FaInstagram, FaFacebookF, FaLinkedinIn, FaWhatsapp } from 'react-icons/fa'
+import { useAuth } from '@/context/AuthContext'
+import LogoutButton from './LogoutButton'
+
 
 export default function Footer() {
+  const { user, profile, loading } = useAuth()
+
   return (
     <footer className="bg-[#2c1a4b] text-white pt-12 pb-6">
       <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-8">
 
         {/* Quick Links */}
-        <div>
-          <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-gray-300">
-            <li>
-              <Link href="/" className="hover:text-yellow-400 transition">Home</Link>
-            </li>
-            <li>
-              <Link href="/products" className="hover:text-yellow-400 transition">Courses</Link>
-            </li>
-            <li>
-              <Link href="/tuitions" className="hover:text-yellow-400 transition">Tuitions</Link>
-            </li>
-            <li>
-              <Link href="/blogs" className="hover:text-yellow-400 transition">Blogs</Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-yellow-400 transition">Contact</Link>
-            </li>
-          </ul>
-        </div>
+<div>
+  <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+  <ul className="space-y-2 text-gray-300">
+
+    {/* 👇 Dynamic Dashboard Link */}
+            {!loading && user && profile?.role === 'student' && (
+              <li>
+                <Link href="/my-dashboard" className="hover:text-yellow-400 transition">
+                  My Dashboard
+                </Link>
+              </li>
+            )}
+
+    <li>
+      <Link href="/" className="hover:text-yellow-400 transition">
+        Home
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/about" className="hover:text-yellow-400 transition">
+        About
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/products" className="hover:text-yellow-400 transition">
+        Courses
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/solutions" className="hover:text-yellow-400 transition">
+        Solutions
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/tuitions" className="hover:text-yellow-400 transition">
+        Tuitions
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/blogs" className="hover:text-yellow-400 transition">
+        Blogs
+      </Link>
+    </li>
+
+    <li>
+      <Link href="/contact" className="hover:text-yellow-400 transition">
+        Contact
+      </Link>
+    </li>
+
+    {!user && (
+      <>
+        <Link
+          href="/login"
+          className="hover:text-yellow-400 transition"
+        >
+          Login
+        </Link>
+      </>
+    )}
+
+
+
+  </ul>
+</div>
+
 
         {/* Contact Info */}
         <div>

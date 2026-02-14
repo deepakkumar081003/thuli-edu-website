@@ -4,13 +4,22 @@ import { supabaseBrowser } from '@/lib/supabaseBrowser'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function LogoutButton() {
+interface Props {
+  onLogout?: () => void
+}
+
+export default function LogoutButton({ onLogout }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   async function handleLogout() {
     setLoading(true)
+
     await supabaseBrowser.auth.signOut()
+
+    // ✅ Close hamburger menu
+    if (onLogout) onLogout()
+
     router.replace('/login')
   }
 
@@ -18,7 +27,7 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className="block md:inline-block px-4 py-2 text-white hover:text-yellow-400 transition-colors disabled:opacity-50"
+      className="block lg:inline-block px-4 py-2 text-white hover:text-yellow-400 transition-colors disabled:opacity-50"
     >
       {loading ? 'Logging out…' : 'Logout'}
     </button>

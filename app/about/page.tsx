@@ -6,7 +6,7 @@ export default function About() {
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* ABOUT HERO SECTION */}
-      <section className="px-16 md:px-32 py-32 flex flex-col md:flex-row items-center gap-12">
+      <section className="px-16 md:px-32 py-16 flex flex-col md:flex-row items-center gap-12">
         <div className="md:w-1/2 text-center md:text-left">
           <p className="text-yellow-400 font-semibold mb-2">
             That’s How U Learn It

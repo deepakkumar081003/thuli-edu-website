@@ -36,10 +36,10 @@ const sortedCategories = categories?.sort(
 
 
   return (
-    <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
+    <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen ">
 
       {/* ================= TOP HERO ================= */}
-      <section className="px-16 md:px-32 py-28 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
+      <section className="px-16 md:px-32 py-16 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.08)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
 
         <div className="relative max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
@@ -78,93 +78,102 @@ const sortedCategories = categories?.sort(
       </section>
 
       {/* ================= SOLUTIONS BY CATEGORY ================= */}
-<section className="px-12 md:px-32 py-20 space-y-16">
-  {categories?.map(category => (
-    <div key={category.id}>
-      <h2 className="text-3xl md:text-4xl font-bold text-purple-900 mb-8">
-        {category.name}
-      </h2>
+<section className="px-12 md:px-32 py-24 relative overflow-hidden bg-gradient-to-br from-white via-indigo-50 to-purple-50 rounded-3xl">
 
-      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-        {category.products?.map(product => (
-          <div
-            key={product.id}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden flex flex-col"
-          >
-            {product.image_url && (
-              <img
-                src={product.image_url}
-                alt={product.title}
-                className="h-48 w-full object-cover"
-              />
-            )}
+  {/* Dotted Pattern Background */}
+  <div className="absolute inset-0 bg-[radial-gradient(rgba(99,102,241,0.15)_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
 
-            <div className="p-6 flex-1 flex flex-col">
-              <h3 className="text-xl font-semibold text-purple-900">
-                {product.title}
-              </h3>
+  {/* Diagonal Stripe Overlay */}
+  {/* <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(168,85,247,0.05)_25%,transparent_25%,transparent_50%,rgba(168,85,247,0.05)_50%,rgba(168,85,247,0.05)_75%,transparent_75%,transparent)] [background-size:60px_60px] opacity-40 pointer-events-none"></div> */}
 
-              <p className="text-gray-600 text-sm mt-3 flex-1">
-                {product.short_description}
-              </p>
+  {/* Decorative Gradient Blobs */}
+  <div className="absolute -top-32 -left-32 w-96 h-96 bg-purple-400 opacity-15 rounded-full blur-3xl"></div>
+  <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-400 opacity-15 rounded-full blur-3xl"></div>
+  <div className="absolute top-1/3 left-1/2 w-[500px] h-[500px] bg-pink-400 opacity-5 rounded-full blur-3xl -translate-x-1/2"></div>
 
-              {product.price && product.discounted_price ? (
-                <div className="mt-3 flex items-center gap-2 flex-wrap">
-                  {/* Discounted Price */}
-                  <span className="text-lg font-bold text-indigo-600">
-                    Starting from ₹{product.discounted_price}
-                  </span>
+  <div className="relative z-10 space-y-20">
 
-                  {/* Original Price */}
-                  <span className="text-sm text-gray-400 line-through">
-                    ₹{product.price}
-                  </span>
+    {categories?.map(category => (
+      <div key={category.id}>
+        <h2 className="text-3xl md:text-4xl font-bold text-purple-900 mb-8">
+          {category.name}
+        </h2>
 
-                  {/* % OFF Badge */}
-                  <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                    {Math.round(
-                      ((Number(product.price) - Number(product.discounted_price)) /
-                        Number(product.price)) *
-                        100
-                    )}
-                    % OFF
-                  </span>
-                </div>
-              ) : product.price ? (
-                <p className="mt-3 text-lg font-bold text-indigo-600">
-                  Starting from ₹{product.price}
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {category.products?.map(product => (
+            <div
+              key={product.id}
+              className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden flex flex-col"
+            >
+              {product.image_url && (
+                <img
+                  src={product.image_url}
+                  alt={product.title}
+                  className="h-48 w-full object-cover"
+                />
+              )}
+
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="text-xl font-semibold text-purple-900">
+                  {product.title}
+                </h3>
+
+                <p className="text-gray-600 text-sm mt-3 flex-1">
+                  {product.short_description}
                 </p>
-              ) : null}
 
+                {product.price && product.discounted_price ? (
+                  <div className="mt-3 flex items-center gap-2 flex-wrap">
+                    <span className="text-lg font-bold text-indigo-600">
+                      Starting from ₹{product.discounted_price}
+                    </span>
 
+                    <span className="text-sm text-gray-400 line-through">
+                      ₹{product.price}
+                    </span>
 
-              {/* Build Now Button */}
-              <a
-                href={`https://wa.me/917092097170?text=${encodeURIComponent(
-                  `Hi! I want to build "${product.title}". Can you provide details about the services available?`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 
-                          text-white text-center px-6 py-3 rounded-full font-semibold shadow-lg 
-                          transform hover:scale-105 hover:shadow-xl transition-all duration-300"
-              >
-                Build Now
-              </a>
+                    <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                      {Math.round(
+                        ((Number(product.price) - Number(product.discounted_price)) /
+                          Number(product.price)) *
+                          100
+                      )}
+                      % OFF
+                    </span>
+                  </div>
+                ) : product.price ? (
+                  <p className="mt-3 text-lg font-bold text-indigo-600">
+                    Starting from ₹{product.price}
+                  </p>
+                ) : null}
 
+                <a
+                  href={`https://wa.me/917092097170?text=${encodeURIComponent(
+                    `Hi! I want to build "${product.title}". Can you provide details about the services available?`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-block bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 
+                            text-white text-center px-6 py-3 rounded-full font-semibold shadow-lg 
+                            transform hover:scale-105 hover:shadow-xl transition-all duration-300"
+                >
+                  Build Now
+                </a>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {category.products?.length === 0 && (
-          <p className="text-gray-500 col-span-full text-center">
-            No products available in this category.
-          </p>
-        )}
+          {category.products?.length === 0 && (
+            <p className="text-gray-500 col-span-full text-center">
+              No products available in this category.
+            </p>
+          )}
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
 </section>
+
 
 
       {/* ================= CTA HERO ================= */}

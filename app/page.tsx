@@ -26,7 +26,7 @@ export default async function Home() {
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* HERO SECTION */}
-      <section className="relative px-16 md:px-32 py-32 flex flex-col md:flex-row items-center gap-12">
+      <section className="relative px-16 md:px-32 py-16 flex flex-col md:flex-row items-center gap-12">
         <div className="md:w-1/2 text-center md:text-left">
           <p className="text-yellow-400 font-semibold mb-2">Looking to learn ‘how to Code’?</p>
           <h1 className="text-4xl md:text-5xl font-bold text-purple-900 leading-tight mb-4">
@@ -86,17 +86,63 @@ export default async function Home() {
   </div>
 </section>
 
+{/* HOME PAGE COURSES HERO SECTION*/}
+<section className="relative px-16 md:px-32 py-16 overflow-hidden rounded-3xl bg-white">
 
-      {/* COURSES SECTION */}
-      <section className="px-16 md:px-32 py-16">
-        <h2 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">
-          Popular Courses
-        </h2>
-        <p className="text-yellow-400 mb-6 text-xl">
-          Practical, beginner-friendly, and career-focused courses
-        </p>
-        <CoursesCarousel products={products || []} />
-      </section>
+  {/* Dot Matrix Pattern */}
+  <div className="absolute inset-0 
+    bg-[radial-gradient(circle,rgba(99,102,241,0.08)_1px,transparent_1px)] 
+    [background-size:22px_22px] 
+    pointer-events-none">
+  </div>
+
+  {/* Soft Radial Spotlight */}
+  <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] 
+    bg-[radial-gradient(circle,rgba(139,92,246,0.15)_0%,transparent_70%)] 
+    -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+  </div>
+
+  <div className="relative max-w-6xl mx-auto text-center z-10">
+
+    <p className="text-purple-600 font-semibold text-lg mb-3">
+      Learn • Build • Grow
+    </p>
+
+    <h1 className="text-5xl md:text-6xl font-extrabold text-purple-900 leading-tight">
+      Join Industry-Ready Courses <br className="hidden md:block" />
+      Built for Real-World Skills
+    </h1>
+
+    <p className="mt-6 text-lg text-gray-700 max-w-2xl mx-auto">
+      Our courses focus on practical learning, real-time projects, and hands-on experience —
+      helping you gain skills that matter beyond the classroom.
+    </p>
+
+    <div className="mt-10 flex flex-wrap justify-center gap-6">
+      <Link
+        href="/products"
+        className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
+      >
+        Explore All Courses
+      </Link>
+    </div>
+
+    {/* ================= CAROUSEL INSIDE HERO ================= */}
+    <div className="mt-20">
+      <h2 className="text-3xl md:text-4xl font-bold text-purple-900 mb-4">
+        Popular Courses
+      </h2>
+
+      {/* <p className="text-purple-600 mb-10">
+        Practical, beginner-friendly, and career-focused programs
+      </p> */}
+
+      <CoursesCarousel products={products || []} />
+    </div>
+
+  </div>
+</section>
+
 
       {/* TUITIONS HERO SECTION */}
       <section className="px-16 md:px-32 py-24 bg-purple-50 rounded-3xl relative overflow-hidden">

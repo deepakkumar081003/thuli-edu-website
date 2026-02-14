@@ -21,7 +21,7 @@ export default async function BlogsPage() {
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* ================= TOP HERO ================= */}
-      <section className="px-16 md:px-32 py-28 relative overflow-hidden rounded-3xl bg-indigo-50">
+      <section className="px-16 md:px-32 py-16 relative overflow-hidden rounded-3xl bg-indigo-50">
 
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
 

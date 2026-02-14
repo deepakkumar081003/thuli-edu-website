@@ -19,7 +19,7 @@ export default async function TuitionsPage() {
     <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen">
 
       {/* ================= TOP HERO ================= */}
-      <section className="px-16 md:px-32 py-28 relative overflow-hidden rounded-3xl bg-purple-50">
+      <section className="px-16 md:px-32 py-16 relative overflow-hidden rounded-3xl bg-purple-50">
 
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
 
@@ -61,53 +61,63 @@ export default async function TuitionsPage() {
       </section>
 
       {/* ================= TUITIONS GRID ================= */}
-<section className="px-12 md:px-32 py-20">
-  <h2 className="text-4xl font-bold text-purple-900 mb-12 text-center">
-    Available Tuitions
-  </h2>
+<section className="px-12 md:px-32 py-20 relative overflow-hidden">
 
-  <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-    {data?.map((tuition) => (
-      <div
-        key={tuition.id}
-        className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 flex flex-col"
-      >
-        <h3 className="text-xl font-semibold text-purple-900">
-          {tuition.title}
-        </h3>
+  {/* Dotted Pattern Background */}
+  <div className="absolute inset-0 bg-[radial-gradient(rgba(99,102,241,0.12)_1px,transparent_1px)] [background-size:22px_22px] pointer-events-none"></div>
 
-        <p className="text-gray-600 text-sm mt-3 flex-1">
-          {tuition.description}
-        </p>
+  <div className="relative z-10">
+    <h2 className="text-4xl font-bold text-purple-900 mb-12 text-center">
+      Available Tuitions
+    </h2>
 
-        <div className="mt-4 space-y-2 text-sm text-gray-700">
-          {tuition.class_level && <p><strong>Class:</strong> {tuition.class_level}</p>}
-          {tuition.subject && <p><strong>Subject:</strong> {tuition.subject}</p>}
-          {tuition.mode && <p><strong>Mode:</strong> {tuition.mode}</p>}
-          {tuition.fees && <p className="font-semibold text-green-600">Fees: ₹{tuition.fees}</p>}
-        </div>
-
-        {/* Join Now Button */}
-        <a
-          href={`https://wa.me/917092097170?text=${encodeURIComponent(
-            `Hi! I want to join the tuition "${tuition.title}".\nClass: ${tuition.class_level || 'N/A'}\nSubject: ${tuition.subject || 'N/A'}\nMode: ${tuition.mode || 'N/A'}\nFees: ₹${tuition.fees || 'N/A'}\nPlease provide me more details about joining.`
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-block text-center bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      {data?.map((tuition) => (
+        <div
+          key={tuition.id}
+          className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6 flex flex-col"
         >
-          Join Now
-        </a>
-      </div>
-    ))}
-  </div>
+          <h3 className="text-xl font-semibold text-purple-900">
+            {tuition.title}
+          </h3>
 
-  {data?.length === 0 && (
-    <p className="text-center text-gray-500 mt-12">
-      No tuitions available at the moment.
-    </p>
-  )}
+          <p className="text-gray-600 text-sm mt-3 flex-1">
+            {tuition.description}
+          </p>
+
+          <div className="mt-4 space-y-2 text-sm text-gray-700">
+            {tuition.class_level && <p><strong>Class:</strong> {tuition.class_level}</p>}
+            {tuition.subject && <p><strong>Subject:</strong> {tuition.subject}</p>}
+            {tuition.mode && <p><strong>Mode:</strong> {tuition.mode}</p>}
+            {tuition.fees && (
+              <p className="font-semibold text-green-600">
+                Fees: ₹{tuition.fees}
+              </p>
+            )}
+          </div>
+
+          <a
+            href={`https://wa.me/917092097170?text=${encodeURIComponent(
+              `Hi! I want to join the tuition "${tuition.title}".\nClass: ${tuition.class_level || 'N/A'}\nSubject: ${tuition.subject || 'N/A'}\nMode: ${tuition.mode || 'N/A'}\nFees: ₹${tuition.fees || 'N/A'}\nPlease provide me more details about joining.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-block text-center bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+          >
+            Join Now
+          </a>
+        </div>
+      ))}
+    </div>
+
+    {data?.length === 0 && (
+      <p className="text-center text-gray-500 mt-12">
+        No tuitions available at the moment.
+      </p>
+    )}
+  </div>
 </section>
+
 
       {/* ================= CTA HERO ================= */}
 <section className="px-16 md:px-32 py-24 bg-gradient-to-r from-purple-50 via-white to-indigo-50 relative overflow-hidden rounded-3xl">

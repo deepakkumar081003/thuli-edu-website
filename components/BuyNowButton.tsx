@@ -8,9 +8,11 @@ interface Props {
   productId: string
   title: string
   price: number
+  mode: 'online' | 'one_on_one'
 }
 
-export default function BuyNowButton({ productId, title, price }: Props) {
+
+export default function BuyNowButton({ productId, title, price, mode }: Props) {
   const router = useRouter()
   const { user } = useAuth()
 
@@ -53,7 +55,8 @@ const options = {
       razorpay_order_id: response.razorpay_order_id,
       razorpay_payment_id: response.razorpay_payment_id,
       razorpay_signature: response.razorpay_signature,
-      productId
+      productId,
+      mode
     })
   })
 

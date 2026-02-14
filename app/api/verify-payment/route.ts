@@ -28,12 +28,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      productId,
-    } = await req.json()
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, productId, mode } = await req.json()
+
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return NextResponse.json({ error: 'Invalid payment data' }, { status: 400 })
@@ -53,15 +49,16 @@ export async function POST(req: Request) {
 
     // ✅ Optional: Prevent duplicate purchase
     const { data: existing } = await supabase
-      .from('registrations')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('product_id', productId)
-      .single()
+  .from('registrations')
+  .select('id')
+  .eq('user_id', user.id)
+  .eq('product_id', productId)
+  .eq('mode', mode) // <-- check mode as well
+  .single()
 
-    if (existing) {
-      return NextResponse.json({ message: 'Already purchased' })
-    }
+if (existing) {
+  return NextResponse.json({ message: 'Already purchased' })
+}
 
     // 🔎 Get actual product price from DB
     const { data: product, error: productError } = await supabase
@@ -81,16 +78,17 @@ export async function POST(req: Request) {
 
     // ✅ Insert into registrations
     const { error } = await supabase
-    .from('registrations')
-    .insert({
-        user_id: user.id,
-        product_id: productId,
-        status: 'paid',
-        payment_status: 'success',
-        amount_paid: finalAmount,
-        razorpay_order_id,
-        razorpay_payment_id,
-    })
+  .from('registrations')
+  .insert({
+    user_id: user.id,
+    product_id: productId,
+    status: 'paid',
+    payment_status: 'success',
+    amount_paid: finalAmount,
+    razorpay_order_id,
+    razorpay_payment_id,
+    mode // <-- store mode
+  })
 
 
     if (error) {

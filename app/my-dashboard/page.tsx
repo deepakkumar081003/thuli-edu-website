@@ -5,7 +5,8 @@ import {
   HiOutlineBookOpen,
   HiOutlineClipboardList,
   HiOutlineDesktopComputer,
-  HiOutlineCreditCard 
+  HiOutlineCreditCard,
+  HiOutlineUser
 } from 'react-icons/hi'
 import { useAuth } from '@/context/AuthContext'
 
@@ -45,7 +46,7 @@ export default function MyDashboard() {
         </Link>
 
         {/* My Tuitions */}
-        <Link
+        {/* <Link
           href="/my-dashboard/my-tuitions"
           className="group bg-white rounded-3xl shadow-xl border border-purple-100 p-8 hover:shadow-2xl transition hover:-translate-y-1"
         >
@@ -58,10 +59,10 @@ export default function MyDashboard() {
           <p className="text-gray-600">
             View enrolled tuition batches
           </p>
-        </Link>
+        </Link> */}
 
         {/* My Solutions */}
-        <Link
+        {/* <Link
           href="/my-dashboard/my-solutions"
           className="group bg-white rounded-3xl shadow-xl border border-purple-100 p-8 hover:shadow-2xl transition hover:-translate-y-1"
         >
@@ -74,7 +75,7 @@ export default function MyDashboard() {
           <p className="text-gray-600">
             View purchased software/services
           </p>
-        </Link>
+        </Link> */}
 
         {/* My Payments */}
         <Link
@@ -91,6 +92,22 @@ export default function MyDashboard() {
             View all your transactions
           </p>
         </Link>
+
+          {/* My Profile */}
+<Link
+  href="/my-dashboard/my-profile"
+  className="group bg-white rounded-3xl shadow-xl border border-purple-100 p-8 hover:shadow-2xl transition hover:-translate-y-1"
+>
+  <div className="bg-pink-600 text-white w-14 h-14 rounded-xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition">
+    <HiOutlineUser />
+  </div>
+  <h2 className="text-2xl font-semibold text-purple-900 mb-2">
+    My Profile
+  </h2>
+  <p className="text-gray-600">
+    View your personal details
+  </p>
+</Link>
 
 
       </div>

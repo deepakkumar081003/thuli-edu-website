@@ -14,69 +14,106 @@ export default function MyCourses() {
     if (!user) return
 
     const fetchCourses = async () => {
-    const { data, error } = await supabaseBrowser
-      .from('registrations')
-      .select(`
-        id,
-        status,
-        products (
+      const { data, error } = await supabaseBrowser
+        .from('registrations')
+        .select(`
           id,
-          title,
-          slug,
-          image_url,
-          price,
-          categories (
+          status,
+          products (
             id,
-            name
+            title,
+            slug,
+            image_url,
+            price,
+            categories (
+              id,
+              name
+            )
           )
-        )
-      `)
-      .eq('user_id', user.id)
-      .eq('status', 'paid')
-      .eq('products.categories.name', 'Course')
+        `)
+        .eq('user_id', user.id)
+        .eq('status', 'paid')
+        .eq('products.categories.name', 'Course')
 
-    if (!error) {
-      setCourses(data)
+      if (!error) {
+        setCourses(data)
+      }
+
+      setLoading(false)
     }
-
-    setLoading(false)
-  }
-
 
     fetchCourses()
   }, [user])
 
-  if (loading) return <p className="p-6">Loading...</p>
+  if (loading)
+    return (
+      <div className="bg-gradient-to-b from-white via-purple-50 to-indigo-50 min-h-screen flex items-center justify-center">
+        <p className="text-purple-700 font-semibold text-lg">Loading...</p>
+      </div>
+    )
 
   return (
-    <div className="p-8 py-30">
-      <h1 className="text-2xl font-bold mb-6">My Courses</h1>
+    <section className="relative min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 px-12 md:px-32 py-30">
+
+      {/* Header */}
+      <div className="mb-14">
+        <h1 className="text-4xl md:text-5xl font-bold text-purple-900 mb-3">
+          My Courses
+        </h1>
+        <p className="text-yellow-400 text-lg">
+          Access all your purchased courses here
+        </p>
+      </div>
 
       {courses.length === 0 ? (
-        <p>No courses purchased yet.</p>
-      ) : (
-        <div className="grid md:grid-cols-3 gap-6">
-          {courses.map((item) => (
-            <div key={item.id} className="border rounded-lg p-4 shadow">
-              <img
-                src={item.products?.image_url}
-                alt={item.products?.title}
-                className="w-full h-40 object-cover rounded"
-              />
-              <h2 className="mt-3 font-semibold">
-                {item.products?.title}
-              </h2>
+        <div className="bg-white rounded-3xl shadow-xl p-12 max-w-xl">
+          <p className="text-gray-600 text-lg">
+            You haven’t purchased any courses yet.
+          </p>
 
-              <Link
-                href={`/products/${item.products?.slug}`}
-                className="text-purple-600 text-sm mt-2 inline-block"
-              >
-                View Course →
-              </Link>
-            </div>
+          <Link
+            href="/products"
+            className="inline-block mt-6 bg-purple-600 text-white px-8 py-3 rounded-full font-semibold shadow hover:bg-purple-700 hover:scale-105 transition duration-300"
+          >
+            Browse Courses
+          </Link>
+        </div>
+      ) : (
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          {courses.map((item) => (
+            <Link
+              key={item.id}
+              href={`/products/${item.products?.slug}`}
+              className="group block bg-white rounded-3xl shadow-xl border border-purple-100 p-6 hover:shadow-2xl transition hover:-translate-y-1"
+            >
+              <img
+                src={item.products?.image_url || '/placeholder.jpg'}
+                alt={item.products?.title}
+                className="h-56 w-full object-cover rounded-2xl"
+              />
+
+              <div className="mt-6">
+                <h2 className="text-2xl font-semibold text-purple-900">
+                  {item.products?.title}
+                </h2>
+
+                <p className="text-sm text-green-600 font-semibold mt-3">
+                  ✅ Purchased
+                </p>
+
+                <span className="inline-block mt-4 text-purple-700 font-medium group-hover:underline">
+                  View Course →
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
       )}
-    </div>
+
+      {/* Decorative blobs (same as dashboard) */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-indigo-300 opacity-10 rounded-full"></div>
+      <div className="absolute bottom-20 left-20 w-64 h-64 bg-yellow-400 opacity-10 rounded-full"></div>
+
+    </section>
   )
 }

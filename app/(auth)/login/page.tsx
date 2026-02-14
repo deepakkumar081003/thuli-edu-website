@@ -86,10 +86,10 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50 to-indigo-50 flex items-center justify-center px-6 py-2">
 
       {/* LOGIN CARD */}
-      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 overflow-hidden">
+      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl p-10  overflow-hidden">
 
         {/* Decorative blobs */}
         <div className="absolute -top-16 -left-16 w-48 h-48 bg-yellow-400 rounded-full opacity-20"></div>
